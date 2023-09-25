@@ -44,4 +44,7 @@ export const getTotalOrders = (state) =>
 export const getTotalPrice = (state) =>
   state.cart.carts.reduce((acc, cur) => acc + cur.quantity * cur.unitPrice, 0);
 
-export const getOrderQuantity = (state) => state.cart.carts.find;
+export const getOrderQuantityId = (id) => (state) => {
+  const item = state.cart.carts.find((item) => item.id === id);
+  return item?.quantity;
+};
