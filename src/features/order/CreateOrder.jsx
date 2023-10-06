@@ -17,7 +17,6 @@ function CreateOrder() {
   const formErrors = useActionData();
   const username = useSelector(getUsername);
   const address = useSelector(getUserAddress);
-  // const [withPriority, setWithPriority] = useState(false);
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.carts);
   if (cart.length < 1) return <EmptyCart />;
@@ -60,7 +59,13 @@ function CreateOrder() {
               required
             />
           </div>
-          <Button type="small" onClick={() => dispatch(updateAddress())}>
+          <Button
+            type="small"
+            onClick={(e) => {
+              e.preventDefault();
+              dispatch(updateAddress());
+            }}
+          >
             Get Location
           </Button>
         </div>
@@ -71,13 +76,10 @@ function CreateOrder() {
             type="checkbox"
             name="priority"
             id="priority"
-            // value={withPriority}
-            // onChange={(e) => setWithPriority(e.target.checked)}
           />
           <label htmlFor="priority" className="font-medium">
             Want to yo give your order priority?
           </label>
-          pizzaId
         </div>
 
         <div>
