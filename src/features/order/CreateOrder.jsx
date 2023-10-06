@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import store from '../../store';
 import { clearItem } from '../cart/cartSlice';
 import EmptyCart from '../cart/EmptyCart';
-import { updateAddress } from '../user/userSlice';
+import { getUserAddress, getUsername, updateAddress } from '../user/userSlice';
 const isValidPhone = (str) =>
   /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
     str
@@ -15,7 +15,8 @@ function CreateOrder() {
   const navigation = useNavigation();
   const isSubmitting = navigation.state === 'submitting';
   const formErrors = useActionData();
-  const username = useSelector((state) => state.user.username);
+  const username = useSelector(getUsername);
+  const address = useSelector(getUserAddress);
   // const [withPriority, setWithPriority] = useState(false);
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.carts);
@@ -55,10 +56,13 @@ function CreateOrder() {
               className="input w-full"
               type="text"
               name="address"
+              defaultValue={address}
               required
-              onClick={() => dispatch(updateAddress)}
             />
           </div>
+          <Button type="small" onClick={() => dispatch(updateAddress())}>
+            Get Location
+          </Button>
         </div>
 
         <div className="mb-12 flex items-center gap-5">

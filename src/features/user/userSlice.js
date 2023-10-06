@@ -18,13 +18,13 @@ const userSlice = createSlice({
   },
 });
 
-function getPosition() {
+function fetchPosition() {
   return new Promise((resolve, reject) => {
-    navigator.geolocation.getCurrentPosition(resolve, reject);
+    navigator.geolocation.getCurrentPosition(resolve, reject); // Corrected function name
   });
 }
 
-async function getAddress({ lat, lng }) {
+async function fetchAddress({ lat, lng }) {
   const res = await fetch(
     `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}`
   );
@@ -32,23 +32,24 @@ async function getAddress({ lat, lng }) {
   return data;
 }
 
-async function getuserAddress() {
-  const positionObj = await getPosition();
+async function fetchUserAddress() {
+  const positionObj = await fetchPosition();
   const position = {
     lat: positionObj.coords.latitude,
     lng: positionObj.coords.longitude,
   };
 
-  const address = await getAddress(position);
-
-  return `${address.city}, ${address.countryName}`;
+  const address = await fetchAddress(position);
+  return `${address.city}, ${address.principalSubdivision}, ${address.countryName}`;
 }
 
-export const { updateUserName, updateUserAddress } = userSlice.actions;
+export const updateAddress = () => async (dispatch) => {
+  const address = await fetchUserAddress();
+  dispatch({ type: 'userSlice/updateUserAddress', payload: address });
+};
 
-function updateAddress() {
-  return updateUserAddress({ type: 'updateUserAddress', payload: 'Hi' }); // Dispatch the correct action creator
-}
-export { updateAddress };
+export const getUsername = (state) => state.user.username;
+export const getUserAddress = (state) => state.user.userAddress;
+export const { updateUserName } = userSlice.actions;
 
 export default userSlice.reducer;
