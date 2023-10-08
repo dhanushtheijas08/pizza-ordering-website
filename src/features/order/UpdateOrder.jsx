@@ -9,7 +9,7 @@ export default function UpdateOrder({ orders }) {
     </fetcher.Form>
   );
 }
-export async function action({ request, params }) {
+export async function action({ _, params }) {
   const newData = { priority: true };
   await updateOrder(params.orderId, newData);
   return null;
